@@ -79,19 +79,20 @@ public class formatIdentification {
      * @return Integer 分岐で入力された値
      */
 
-    private static Integer forkingPorint() {
+    private static Integer forkingPorint(Integer behavior) {
         try {
             // モジュールのインスタンスか
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            Integer behavior = null;
+            //変数の定義 
+            Integer returnDate = 4;
 
             // 選択肢の表示
             System.out.println("1:¥t discriminationファイル内のファイル一覧を表示");
             System.out.println("3:¥t discriminationファイル内の全ファイルの書式を検証する。");
             System.out.println("2:¥t discriminationファイル内の単独ファイルの命名規則を検証する");
             System.out.println("処理を終了させるには exit と入力してください。");
-            
-            while (!(behavior.equals("exit"))) {
+
+            while (!((br.readLine()).equals("exit"))) {
 
                 // 入力された値によって処理を分岐
                 switch (behavior) {
@@ -100,9 +101,11 @@ public class formatIdentification {
                         break;
                     case 2:
                         System.out.println("単独ファイルの命名規則を検証します。");
+                        returnDate = 2;
                         break;
                     case 3:
                         System.out.println("全ファイルの書式を検証します。");
+                        returnDate = 3;
                         break;
                     default:
                         System.out.println("入力された値が不正です。");
@@ -119,9 +122,13 @@ public class formatIdentification {
 
             }
 
+            
         } catch (IOException e) {
             System.out.println("入力データに誤りがあります。");
             System.out.println(e);
         }
+
+        return behavior;
+
     }
 }
