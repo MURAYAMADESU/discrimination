@@ -12,10 +12,70 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 public class formatIdentification {
     public static void main(String[] args) {
+        String[] tmp;
+        File dirPath = new File("dirPath");
+        Integer processing = forkingPorint();
 
+        while(!(processing.equals(4))){
+            switch(processing){
+                case 0:
+                    return;
+                case 1:
+                    // ファイル一覧を表示
+                    tmp = outputDirPath(dirPath.getAbsolutePath());
+                    for(String file : tmp){
+                        System.out.println(file);
+                    }
+                    break;
+                case 2:
+                    // 単独ファイルの命名規則を検証
+                    tmp = outputDirPath(dirPath.getAbsolutePath());
+                    switch(tmp.length){
+                        case 0:
+                            System.out.println("ファイルが存在しません。");
+                            break;
+                        case 1:
+                            try(BufferedReader csvFile = new BufferedReader(new FileReader("./csvFile"))){
+                                String line;
+                                ArrayList<String> csvData = new ArrayList<>();
+                                while((line = csvFile.readLine()) != null){
+                                    csvData.add(line);
+                                }
+                                for(String data : csvData){
+                                    if(tmp[0].equals(data)){
+                                        System.out.println("ファイル名が正しいです。");
+                                    }else{
+                                        System.out.println("ファイルの命名規則にふさわしくない文字が使われています。");
+                                    }
+                                }
+                            }catch(IOException e){
+                                System.out.println("csvファイルが存在しません。");
+                            };
+                            break;
+                        default:
+                            System.out.println("ファイルが複数存在します。");
+                            break;
+                    }
+                    break;
+                case 3:
+                    // 全ファイルの書式を検証
+
+
+
+
+
+                    
+                    break;
+                default:
+                    System.out.println(processing);
+                    break;
+            }
+                processing = forkingPorint();
+        }
     }
 
     /**
@@ -79,56 +139,53 @@ public class formatIdentification {
      * @return Integer 分岐で入力された値
      */
 
-    private static Integer forkingPorint(Integer behavior) {
-        try {
-            // モジュールのインスタンスか
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            //変数の定義 
-            Integer returnDate = 4;
+    private static Integer forkingPorint(){
 
-            // 選択肢の表示
-            System.out.println("1:¥t discriminationファイル内のファイル一覧を表示");
-            System.out.println("3:¥t discriminationファイル内の全ファイルの書式を検証する。");
-            System.out.println("2:¥t discriminationファイル内の単独ファイルの命名規則を検証する");
-            System.out.println("処理を終了させるには exit と入力してください。");
+        String behavior = null;
+        int returnDate = 0;
 
-            while (!((br.readLine()).equals("exit"))) {
+        try{
+        // モジュールのインスタンスか
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-                // 入力された値によって処理を分岐
-                switch (behavior) {
-                    case 1:
-                        System.out.println("ファイル一覧を表示します。");
-                        break;
-                    case 2:
-                        System.out.println("単独ファイルの命名規則を検証します。");
-                        returnDate = 2;
-                        break;
-                    case 3:
-                        System.out.println("全ファイルの書式を検証します。");
-                        returnDate = 3;
-                        break;
-                    default:
-                        System.out.println("入力された値が不正です。");
-                        break;
-                }
+        // 選択肢の表示
+        System.out.println("1: discriminationファイル内のファイル一覧を表示");
+        System.out.println("2: discriminationファイル内の単独ファイルの命名規則を検証する");
+        System.out.println("3: discriminationファイル内の全ファイルの書式を検証する。");
+        System.out.println("処理を終了させるには exit と入力してください。");
+        behavior = br.readLine();
 
-                // 選択肢の表示
-                System.out.println("1:¥t discriminationファイル内のファイル一覧を表示");
-                System.out.println("3:¥t discriminationファイル内の全ファイルの書式を検証する。");
-                System.out.println("2:¥t discriminationファイル内の単独ファイルの命名規則を検証する");
-                System.out.println("処理を終了させるには exit と入力してください。");
+        if (!((behavior).equals("exit"))) {
 
-                behavior = Integer.parseInt(br.readLine());
-
+            // 入力された値によって処理を分岐
+            switch (behavior) {
+                case "1":
+                    System.out.println("ファイル一覧を表示します。");
+                    returnDate = 1;
+                    break;
+                case "2":
+                    System.out.println("単独ファイルの命名規則を検証します。");
+                    returnDate = 2;
+                    break;
+                case "3":
+                    System.out.println("全ファイルの書式を検証します。");
+                    returnDate = 3;
+                    break;
+                default:
+                    returnDate = 4;
+                    throw new IOException();
             }
 
-            
-        } catch (IOException e) {
-            System.out.println("入力データに誤りがあります。");
-            System.out.println(e);
+        } else {
+            System.out.println("処理を終了します。");
+            returnDate = 0;
+        }
+        }catch(IOException e){
+            System.out.println("入力エラーが発生しました。");
+            return returnDate;
         }
 
-        return behavior;
+        return returnDate;
 
     }
 }
