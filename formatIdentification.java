@@ -33,18 +33,14 @@ public class formatIdentification {
                     break;
                 case 2:
                     // 単独ファイルの命名規則を検証
-                    tmp = outputDirPath(dirPath.getAbsolutePath());
+                    tmp = outputFileName(dirPath.getAbsolutePath());
                     switch(tmp.length){
                         case 0:
                             System.out.println("ファイルが存在しません。");
                             break;
                         case 1:
                             try(BufferedReader csvFile = new BufferedReader(new FileReader("./csvFile"))){
-                                String line;
-                                ArrayList<String> csvData = new ArrayList<>();
-                                while((line = csvFile.readLine()) != null){
-                                    csvData.add(line);
-                                }
+                                String[] csvData = (csvFile.readLine()).split(",");
                                 for(String data : csvData){
                                     if(tmp[0].equals(data)){
                                         System.out.println("ファイル名が正しいです。");
@@ -63,12 +59,20 @@ public class formatIdentification {
                     break;
                 case 3:
                     // 全ファイルの書式を検証
+                    try(BufferedReader csvFile = new BufferedReader(new FileReader("./csvFile"))){
+                        String[] csvDate = (csvFile.readLine()).split(",");
+                        ArrayList<String> dirList = new ArrayList<>();
+                        ArrayList<String> fileList = new ArrayList<>();
 
+                        dirList.add(dirPath.getAbsolutePath());
 
+                        for(String date : fileList){
 
+                        }
 
-
-                    
+                        }catch(IOException e){
+                            System.out.println("csvファイルが存在しません。");
+                        };
                     break;
                 default:
                     System.out.println(processing);
@@ -78,6 +82,8 @@ public class formatIdentification {
         }
     }
 
+    // OK
+    
     /**
      * 絶対パスで渡されたディレクトリーないに存在するファイルの名前を返すメゾット
      * 
@@ -85,17 +91,18 @@ public class formatIdentification {
      * @return String型の配列でディレクトリー内のに存在するファイル名を返す
      */
 
-    private static String[] outputFileName(String dirPath) {
-        File[] discrimination = new File(new File("dirPath").getAbsolutePath()).listFiles();
+    private static String[] outputdirName(String dirPath) {
+        File[] discrimination = new File(dirPath).listFiles();
 
+        // 引数として渡されたディレクトリー内にあるフォルダーのみを識別する。
         ArrayList<String> fileName = new ArrayList<>();
-
         for (File file : discrimination) {
             if (file.isFile()) {
                 fileName.add(file.getName());
             }
         }
 
+        //可変配列に入っているデータを配列に変換
         String returnDate[] = new String[fileName.size()];
         for (int i = 0; i < fileName.size(); i++) {
             returnDate[i] = fileName.get(i);
